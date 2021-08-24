@@ -13,6 +13,14 @@ Frankly speaking, predictive maintenance doesn’t require anything more than an
 - Aviod or minimize the downtimes. 
 
 **Objective of this model** is to detect the machine failure using some of available information regarding the machine and also to build an interface.
+## Tech Stack used:
+- Python 3.7.4
+- gradio 2.2.13
+- pandas 1.2.3
+- scikit-learn 0.23.2
+- seaborn 0.11.1
+- yellowbrick 1.3.post1
+- matplotlib  3.4.2
 
 # Dataset Information
 Since real predictive maintenance datasets are generally difficult to obtain and in particular difficult to publish, we present and provide a synthetic dataset that reflects real predictive maintenance encountered in industry to the best of our knowledge.. 
@@ -50,16 +58,71 @@ As mentioned before there are five independent failure modes within system and a
 In any well maintained systems, the occurances of failures are to be minimum in this case also that's true over only about **3.4%** of time the said machine fails. Let us see the share of different mode of faults. 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/83111155/130551522-47a57741-97fb-4b28-9dda-0a2ec669695d.png" title="% failures">
+  <img src="https://user-images.githubusercontent.com/83111155/130551522-47a57741-97fb-4b28-9dda-0a2ec669695d.png" title="% failures bar chart">
   <p align="center">Percentage of different machine failures</p>
 </p>
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/83111155/130554008-209e3a15-5a76-47b8-b76a-2e1daa5c1a1f.png" title="% failures">
+  <img src="https://user-images.githubusercontent.com/83111155/130554008-209e3a15-5a76-47b8-b76a-2e1daa5c1a1f.png" title="% failures pie chart">
   <p align="center">Pie chart of different failures</p>
 </p>
 Here Heat Dissipation failure seems to be more common type of failure within the system, thus this indicates that temperature monitoring of process and environment is to more important in order to minimize this type of failure also, it has 30.8% of share among other type of failures.
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/83111155/130555717-6f710d0d-3d04-4fde-b3a0-7a8984e5da13.png" title="% failures">
+  <img src="https://user-images.githubusercontent.com/83111155/130555717-6f710d0d-3d04-4fde-b3a0-7a8984e5da13.png" title="Corelation Plot">
   <p align="center">Correlation Plot of all attributes</p>
 </p>
 As expected air temperature has impact on process temperature thus, controlling air temperature will regulate the process temperature and reduce the possibilty of HDF failure.  
+
+# Approach towards building classifiers
+We are going to build classifiers with high precision rate than recall rate, because I want to minimize the **"false alarms"**. 
+
+## Building Logisitic Regression Model 
+Logisitic Regression model was build by using Air temp, process temp,rotational speed, torque and tool wear to predict the status of machine failure. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/83111155/130585703-f0f62926-d983-4a15-87c7-269ae875a785.png" title="Confusion Matrix of LR">
+  <img src="https://user-images.githubusercontent.com/83111155/130585771-e1284ab7-414b-4017-86bf-bd24b70e8131.png" title="ROC Curve of LR">
+  <p align="center">Confusion Matrix and ROC curve of logistic Regression</p>
+</p>
+
+From confusion matrix shows that 45 samples of class 1 were wrongly as Class 0 and only 16 samples were classified as Class 1. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/83111155/130585736-e61bcc33-77bb-465f-aee4-9ee3e1ebd042.png" title="PR Curve of LR">
+  <p align="center">PR curve of logistic Regression</p>
+</p>
+
+With precision score at **0.62** and recall score at **0.26** logistic regression performed better well.But still to many **False** alarms. 
+
+## Building Random Forest Classifier Model 
+Same features are used in building the classifier and see the performance. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/83111155/130585707-71b37164-c91d-4359-9339-9da2d0cabef5.png" title="Confusion Matrix of RFC">
+  <img src="https://user-images.githubusercontent.com/83111155/130585763-edff3129-d397-4016-902f-908f8896efba.png" title="ROC Curve of RFC">
+  <p align="center">Confusion Matrix and ROC curve of Random Forest Classifier</p>
+</p>
+
+Comparing with Logistic Regression there's less **False alarms** and there's more number of samples were classified with right class. 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/83111155/130618398-590791be-77fe-4056-9807-94d802e79af1.png" title="PR Curve of RFC">
+  <p align="center">PR curve of Random Forest Regression</p>
+</p>
+
+With precision score at **0.79** and recall score at **0.31** Random Forest Classifier performed well than previous one.But still to less **False alarms**. 
+We will use this model to build an simple interface. 
+
+# Building demo interface with model 
+Gradio has this amazing interface to demo your model thus, using that we are able to see the model's ability to predict the proablility of the status of machine failure.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/83111155/130619271-0f39706b-7f2d-4b7c-b84e-c5043561fcda.png" title="Screenshot2">
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/83111155/130619267-d56bdd09-3c3a-48b9-b18f-38be57d6801b.png" title="Screenshot2">
+</p>
+
+# Future Work 
+- This project doesn't end here it has go even futher with identifying the different failure modes within the system.
+- More **False Alarms** should be flagged with person in site to make sure that machine failure is need happening and also it should predict even before. 
