@@ -13,6 +13,14 @@ Frankly speaking, predictive maintenance doesn’t require anything more than an
 - Aviod or minimize the downtimes. 
 
 **Objective of this model** is to detect the machine failure using some of available information regarding the machine and also to build an interface.
+## Tech Stack used:
+- Python 3.7.4
+- gradio 2.2.13
+- pandas 1.2.3
+- scikit-learn 0.23.2
+- seaborn 0.11.1
+- yellowbrick 1.3.post1
+- matplotlib  3.4.2
 
 # Dataset Information
 Since real predictive maintenance datasets are generally difficult to obtain and in particular difficult to publish, we present and provide a synthetic dataset that reflects real predictive maintenance encountered in industry to the best of our knowledge.. 
@@ -63,3 +71,5 @@ Here Heat Dissipation failure seems to be more common type of failure within the
   <p align="center">Correlation Plot of all attributes</p>
 </p>
 As expected air temperature has impact on process temperature thus, controlling air temperature will regulate the process temperature and reduce the possibilty of HDF failure.  
+
+# Approach towards building classifiers
